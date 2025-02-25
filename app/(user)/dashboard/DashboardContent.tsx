@@ -53,7 +53,10 @@ export function MyDashboardContent() {
 	const [user_id, setUserId] = useState<string | null>(null);
 	const supabase = createClient();
 	const searchParams = useSearchParams();
-	setUserId(searchParams.get("user_id"));
+
+	useEffect(() => {
+		setUserId(searchParams.get("user_id"));
+	}, [searchParams]);
 
 	useEffect(() => {
 		async function fetchDashboardData() {
@@ -114,7 +117,7 @@ export function MyDashboardContent() {
 		}
 
 		fetchDashboardData();
-	}, []);
+	}, [user_id, supabase]);
 
 	if (loading) {
 		return (
