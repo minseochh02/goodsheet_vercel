@@ -1,6 +1,14 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Create supabase client once outside component
+const supabase = createClient();
 
 interface User {
 	id: string;
@@ -36,12 +44,6 @@ interface DashboardData {
 	subscriptions: Subscription | null;
 }
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-
 export function MyDashboardContent() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -51,31 +53,39 @@ export function MyDashboardContent() {
 		subscriptions: null,
 	});
 	const [user_id, setUserId] = useState<string | null>(null);
-	const supabase = createClient();
 	const searchParams = useSearchParams();
 
 	useEffect(() => {
-		setUserId(searchParams.get("user_id"));
+		async function checkAuth() {
+			const urlUserId = searchParams.get("user_id");
+			if (urlUserId) {
+				setUserId(urlUserId);
+				return;
+			}
+
+			const {
+				data: { session },
+				error,
+			} = await supabase.auth.getSession();
+			if (error || !session?.user) {
+				setError("Please sign in to view the dashboard");
+				setLoading(false);
+				return;
+			}
+			setUserId(session.user.id);
+		}
+
+		checkAuth();
 	}, [searchParams]);
 
 	useEffect(() => {
 		async function fetchDashboardData() {
+			if (!user_id) return;
+
 			try {
 				setLoading(true);
 				setError(null);
 
-				if (!user_id) {
-					// Get current user
-					const {
-						data: { user },
-						error: userError,
-					} = await supabase.auth.getUser();
-					if (userError) throw new Error("Failed to get user session");
-					if (!user) {
-						throw new Error("No user found");
-					}
-					setUserId(user.id);
-				}
 				// Fetch user details
 				const { data: userData, error: userDetailsError } = await supabase
 					.from("users")
@@ -117,7 +127,7 @@ export function MyDashboardContent() {
 		}
 
 		fetchDashboardData();
-	}, [user_id, supabase]);
+	}, [user_id]);
 
 	if (loading) {
 		return (
