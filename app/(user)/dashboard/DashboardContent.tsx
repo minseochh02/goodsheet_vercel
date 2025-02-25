@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 // Create supabase client once outside component
 const supabase = createClient();
 
@@ -54,7 +55,7 @@ export function MyDashboardContent() {
 	});
 	const [user_id, setUserId] = useState<string | null>(null);
 	const searchParams = useSearchParams();
-
+	const router = useRouter();
 	useEffect(() => {
 		async function checkAuth() {
 			const urlUserId = searchParams.get("user_id");
@@ -194,7 +195,13 @@ export function MyDashboardContent() {
 						<CardTitle>Connect to KakaoTalk</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<Button>Connect to KakaoTalk</Button>
+						<Button
+							onClick={() => {
+								router.push("/kakao/authorize?user_id=" + user_id);
+							}}
+						>
+							Connect to KakaoTalk
+						</Button>
 					</CardContent>
 				</Card>
 			)}
