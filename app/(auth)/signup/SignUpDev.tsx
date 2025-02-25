@@ -296,7 +296,7 @@ function SignUpContent() {
 			return;
 		}
 		window.open(templateUrl, "_blank");
-		setCurrentStep(3); // Move to next step after opening template
+		// step 2 will be a tutorial page, don't move to step 3
 	};
 
 	const handleCompleteSetup = () => {
