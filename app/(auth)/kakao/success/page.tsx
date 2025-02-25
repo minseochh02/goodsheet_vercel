@@ -1,3 +1,5 @@
+import { KakaoSuccessContent } from "./SuccessContent";
+
 export default function KakaoSuccess() {
-	return <div>Kakao Success</div>;
+	return <KakaoSuccessContent />;
 }
