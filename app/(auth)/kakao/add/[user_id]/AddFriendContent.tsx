@@ -58,7 +58,6 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 					</div>
 
 					<Button
-						asChild
 						className="w-full sm:w-auto bg-[#fee500] hover:bg-[#e6cf00] text-black"
 						onClick={async () => {
 							const response = await fetch(
