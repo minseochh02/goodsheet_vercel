@@ -197,7 +197,7 @@ export function MyDashboardContent() {
 					<CardContent>
 						<Button
 							onClick={() => {
-								router.push("/kakao/authorize?user_id=" + user_id);
+								router.push("/kakao?user_id=" + user_id);
 							}}
 						>
 							Connect to KakaoTalk
