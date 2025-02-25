@@ -156,18 +156,20 @@ function SignUpContent() {
 
 		const handleRedirect = async () => {
 			try {
-				const { data, error } =
-					await supabase.auth.exchangeCodeForSession(redirect_url);
+				const {
+					data: { session },
+					error,
+				} = await supabase.auth.getSession();
 				if (error) throw error;
 
-				setSession(data.session);
+				setSession(session);
 
-				if (data.session?.user?.email) {
+				if (session?.user?.email) {
 					// Check if user exists
 					const { data: userData, error: userError } = await supabase
 						.from("users")
 						.select("*")
-						.eq("email", data.session.user.email)
+						.eq("email", session.user.email)
 						.single();
 
 					if (userError && userError.code !== "PGRST116") {
@@ -200,9 +202,9 @@ function SignUpContent() {
 						const { data: newUser, error: createError } = await supabase
 							.from("users")
 							.insert({
-								email: data.session.user.email,
-								name: data.session.user.user_metadata.name,
-								profile_pic: data.session.user.user_metadata.avatar_url,
+								email: session.user.email,
+								name: session.user.user_metadata.name,
+								profile_pic: session.user.user_metadata.avatar_url,
 								created_at: new Date(),
 							})
 							.select()
