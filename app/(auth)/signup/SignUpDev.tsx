@@ -140,7 +140,16 @@ function SignUpContent() {
 						if (createError) throw createError;
 						setApp(newApp);
 
-						// move to /mypage
+						// call to /api/new-user
+						fetch("/api/new-user", {
+							method: "POST",
+							body: JSON.stringify({
+								user_id: userData.id,
+								sheet_id: sheet_id,
+								script_id: script_id,
+							}),
+						});
+						// if successful, move to /mypage
 						router.push("/mypage");
 					}
 				} else {
