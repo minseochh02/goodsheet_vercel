@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 export default function LoginPageContent() {
 	const searchParams = useSearchParams();
@@ -35,5 +35,5 @@ export default function LoginPageContent() {
 		checkAuthAndRedirect();
 	}, [user_id, router]);
 
-	return null; // or a loading component while checking auth
+	return <div>Loading...</div>; // or a loading component while checking auth
 }

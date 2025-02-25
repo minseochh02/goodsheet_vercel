@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { Suspense, useState, useEffect, useCallback } from "react";
 import {
 	Card,
 	CardContent,
@@ -321,16 +321,17 @@ export default function SignUpPageContent() {
 					</CardTitle>
 					<CardDescription>Complete these steps to get started</CardDescription>
 				</CardHeader>
-				<CardContent>
-					{/* Progress bar */}
-					<div className="mb-8">
-						<div className="flex items-center justify-between mb-2">
-							{steps.map((step, index) => (
-								<React.Fragment key={step.number}>
-									{/* Step circle */}
-									<div className="flex flex-col items-center">
-										<div
-											className={`
+				<Suspense fallback={<div>Loading...</div>}>
+					<CardContent>
+						{/* Progress bar */}
+						<div className="mb-8">
+							<div className="flex items-center justify-between mb-2">
+								{steps.map((step, index) => (
+									<React.Fragment key={step.number}>
+										{/* Step circle */}
+										<div className="flex flex-col items-center">
+											<div
+												className={`
                       w-10 h-10 rounded-full flex items-center justify-center
                       ${
 												currentStep > step.number
@@ -341,19 +342,19 @@ export default function SignUpPageContent() {
 											}
                       text-white font-medium
                     `}
-										>
-											{currentStep > step.number ? (
-												<Check className="w-6 h-6" />
-											) : (
-												step.number
-											)}
+											>
+												{currentStep > step.number ? (
+													<Check className="w-6 h-6" />
+												) : (
+													step.number
+												)}
+											</div>
+											<span className="text-sm mt-2">{step.title}</span>
 										</div>
-										<span className="text-sm mt-2">{step.title}</span>
-									</div>
-									{/* Connector line */}
-									{index < steps.length - 1 && (
-										<div
-											className={`
+										{/* Connector line */}
+										{index < steps.length - 1 && (
+											<div
+												className={`
                       flex-1 h-1 mx-4
                       ${
 												currentStep > step.number + 1
@@ -363,57 +364,58 @@ export default function SignUpPageContent() {
 														: "bg-gray-200"
 											}
                     `}
-										/>
-									)}
-								</React.Fragment>
-							))}
+											/>
+										)}
+									</React.Fragment>
+								))}
+							</div>
 						</div>
-					</div>
 
-					{/* Current step content */}
-					<div className="text-center py-6">
-						<h3 className="text-xl font-semibold mb-2">
-							{steps[currentStep - 1].title}
-						</h3>
-						<p className="text-gray-600 mb-6">
-							{steps[currentStep - 1].description}
-						</p>
-						<Button
-							onClick={steps[currentStep - 1].action}
-							disabled={steps[currentStep - 1].loading}
-							className="w-full max-w-sm"
-						>
-							{steps[currentStep - 1].loading ? (
-								<span className="flex items-center">Loading...</span>
-							) : (
-								<span className="flex items-center">
-									{steps[currentStep - 1].buttonText}
-									<ArrowRight className="ml-2 w-4 h-4" />
-								</span>
-							)}
-						</Button>
-					</div>
-
-					{/* Debug info */}
-					{process.env.NODE_ENV === "development" && (
-						<div className="mt-8 p-4 bg-gray-100 rounded text-xs">
-							<pre>
-								Current State:{" "}
-								{JSON.stringify(
-									{
-										currentStep,
-										authLoading,
-										user,
-										templateOpened,
-										appCreating,
-									},
-									null,
-									2
+						{/* Current step content */}
+						<div className="text-center py-6">
+							<h3 className="text-xl font-semibold mb-2">
+								{steps[currentStep - 1].title}
+							</h3>
+							<p className="text-gray-600 mb-6">
+								{steps[currentStep - 1].description}
+							</p>
+							<Button
+								onClick={steps[currentStep - 1].action}
+								disabled={steps[currentStep - 1].loading}
+								className="w-full max-w-sm"
+							>
+								{steps[currentStep - 1].loading ? (
+									<span className="flex items-center">Loading...</span>
+								) : (
+									<span className="flex items-center">
+										{steps[currentStep - 1].buttonText}
+										<ArrowRight className="ml-2 w-4 h-4" />
+									</span>
 								)}
-							</pre>
+							</Button>
 						</div>
-					)}
-				</CardContent>
+
+						{/* Debug info */}
+						{process.env.NODE_ENV === "development" && (
+							<div className="mt-8 p-4 bg-gray-100 rounded text-xs">
+								<pre>
+									Current State:{" "}
+									{JSON.stringify(
+										{
+											currentStep,
+											authLoading,
+											user,
+											templateOpened,
+											appCreating,
+										},
+										null,
+										2
+									)}
+								</pre>
+							</div>
+						)}
+					</CardContent>
+				</Suspense>
 			</Card>
 		</div>
 	);
