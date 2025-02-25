@@ -8,11 +8,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
   }
 
-  try {
-    const response = await fetch('https://minseochh02-goodsheet.hf.space/authorize', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+	try {
+		const response = await fetch(
+			"https://minseochh02-goodsheet.hf.space/authorize?user_id=" + user_id,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
       },
     });
 
