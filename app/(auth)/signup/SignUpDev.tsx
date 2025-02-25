@@ -15,6 +15,7 @@ import {
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 // Search params wrapper component
 function SignUpContent() {
@@ -32,6 +33,8 @@ function SignUpContent() {
 	const [loading, setLoading] = useState(true);
 
 	const supabase = createClient();
+	// Inside your component
+	const router = useRouter();
 
 	// Initial auth check - runs only once
 	useEffect(() => {
@@ -120,7 +123,7 @@ function SignUpContent() {
 							appData.sheet_id === sheet_id &&
 							appData.script_id === script_id
 						) {
-							redirect("/mypage");
+							router.push("/mypage");
 						}
 					} else {
 						// Create new app for existing user
@@ -138,7 +141,7 @@ function SignUpContent() {
 						setApp(newApp);
 
 						// move to /mypage
-						redirect("/mypage");
+						router.push("/mypage");
 					}
 				} else {
 					// User doesn't exist, stay at step 1 for sign in
@@ -194,7 +197,7 @@ function SignUpContent() {
 
 						if (appData) {
 							setApp(appData);
-							redirect("/mypage");
+							router.push("/mypage");
 						} else {
 							// User exists but no app
 							setCurrentStep(2);
@@ -271,7 +274,7 @@ function SignUpContent() {
 	};
 
 	const handleCompleteSetup = () => {
-		redirect("/mypage");
+		router.push("/mypage");
 	};
 
 	const stepsUI = [
