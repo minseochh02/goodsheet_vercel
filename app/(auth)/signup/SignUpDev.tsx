@@ -31,6 +31,7 @@ function SignUpContent() {
 	const [currentStep, setCurrentStep] = useState<number>(1);
 	const [session, setSession] = useState<Session | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [isEmailParamsFlow, setIsEmailParamsFlow] = useState(false);
 
 	const supabase = createClient();
 	// Inside your component
@@ -88,6 +89,7 @@ function SignUpContent() {
 	// Handle URL params scenario (Scenario A)
 	useEffect(() => {
 		if (!email || !sheet_id || !script_id || loading) return;
+		setIsEmailParamsFlow(true);
 		setCurrentStep(3);
 		const handleEmailParams = async () => {
 			try {
@@ -240,7 +242,7 @@ function SignUpContent() {
 
 	// Determine step based on state
 	useEffect(() => {
-		if (loading) return;
+		if (loading || isEmailParamsFlow) return;
 
 		if (!session) {
 			setCurrentStep(1); // Not logged in
@@ -251,7 +253,7 @@ function SignUpContent() {
 		} else {
 			setCurrentStep(3); // User and app exist
 		}
-	}, [session, user, app, loading]);
+	}, [session, user, app, loading, isEmailParamsFlow]);
 
 	const handleGoogleSignIn = async () => {
 		try {
