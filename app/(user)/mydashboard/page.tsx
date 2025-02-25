@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
-
+import { MyDashboardContent } from "./MyDashboardContent";
 export default function MyLinksPage() {
 	return (
 		<Suspense
@@ -9,6 +9,8 @@ export default function MyLinksPage() {
 					<Loader2 className="animate-spin h-6 w-6 text-gray-600" />
 				</div>
 			}
-		></Suspense>
+		>
+			<MyDashboardContent />
+		</Suspense>
 	);
 }
