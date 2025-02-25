@@ -17,7 +17,7 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 			const { data: app } = await supabase
 				.from("apps")
 				.select("*")
-				.eq("id", params.user_id)
+				.eq("user_id", params.user_id)
 				.single();
 			setUser_name(app?.kakao?.nickname);
 			setProfile_pic(app?.kakao?.profile_image);
