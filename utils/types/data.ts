@@ -6,7 +6,7 @@ export interface UserData {
 	created_at: string;
 }
 
-export interface UserApp {
+export interface AppData {
 	id: string;
 	user_id: string;
 	sheet_id: string | null;

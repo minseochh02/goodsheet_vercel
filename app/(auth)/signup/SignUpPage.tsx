@@ -298,7 +298,7 @@ export default function SignUpPageContent() {
 				? "1. Make a copy of the template in the opened tab\n2. Click 'Next' after you've copied the template"
 				: "You will need to create a copy of the template spreadsheet",
 			action: templateOpened ? () => setCurrentStep(3) : setUpApp,
-			buttonText: templateOpened ? "Next" : "Open Template",
+			buttonText: templateOpened ? "Next" : "Get a Copy of Template",
 			loading: false,
 		},
 		{
