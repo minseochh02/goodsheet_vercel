@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { Button } from "@/components/ui/button";
 // Create supabase client once outside component
 const supabase = createClient();
 
@@ -187,7 +187,17 @@ export function MyDashboardContent() {
 					</div>
 				</CardContent>
 			</Card>
-
+			{/* Connect to KakaoTalk Card, show if kakao does not exist */}
+			{!data.app?.kakao?.token && (
+				<Card>
+					<CardHeader>
+						<CardTitle>Connect to KakaoTalk</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<Button>Connect to KakaoTalk</Button>
+					</CardContent>
+				</Card>
+			)}
 			{/* Subscription Card - Only show if kakao exists */}
 			{data.app?.kakao?.token && (
 				<Card>

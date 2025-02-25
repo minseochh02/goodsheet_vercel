@@ -11,7 +11,7 @@ function NavbarContent() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const emailParam = searchParams.get("email");
+	const user_id = searchParams.get("user_id");
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 	const supabase = createClient();
@@ -69,7 +69,7 @@ function NavbarContent() {
 		}
 	};
 
-	if (emailParam) return null;
+	if (user_id) return null;
 
 	return (
 		<header className="bg-white shadow-sm">
