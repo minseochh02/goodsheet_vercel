@@ -88,6 +88,7 @@ function SignUpContent() {
 	// Handle URL params scenario (Scenario A)
 	useEffect(() => {
 		if (!email || !sheet_id || !script_id || loading) return;
+		setCurrentStep(3);
 		const handleEmailParams = async () => {
 			try {
 				// Check if user exists by email
