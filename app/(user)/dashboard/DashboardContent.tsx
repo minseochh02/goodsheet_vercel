@@ -197,7 +197,11 @@ export function MyDashboardContent() {
 					<CardContent>
 						<Button
 							onClick={() => {
-								router.push("/kakao?user_id=" + user_id);
+								// open new tab
+								window.open(
+									window.location.origin + "/kakao?user_id=" + user_id,
+									"_blank"
+								);
 							}}
 						>
 							Connect to KakaoTalk
