@@ -64,7 +64,7 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 								`/api/kakao/subscription?user_id=${params.user_id}`
 							);
 							const data = await response.json();
-							window.location.href = data.url;
+							window.location.href = data.authorization_url;
 						}}
 					>
 						Continue with KakaoTalk
