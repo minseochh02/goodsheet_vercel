@@ -60,10 +60,15 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 					<Button
 						asChild
 						className="w-full sm:w-auto bg-[#fee500] hover:bg-[#e6cf00] text-black"
+						onClick={async () => {
+							const response = await fetch(
+								`/api/kakao/subscription?user_id=${params.user_id}`
+							);
+							const data = await response.json();
+							window.location.href = data.authorization_url;
+						}}
 					>
-						<a href={`/api/authorize-subscription?user_id=${params.user_id}`}>
-							Continue with KakaoTalk
-						</a>
+						Continue with KakaoTalk Continue with KakaoTalk
 					</Button>
 				</CardContent>
 			</Card>
