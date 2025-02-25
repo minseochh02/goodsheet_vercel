@@ -76,18 +76,36 @@ function SignUpContent() {
 						.eq("email", data.session.user.email)
 						.single();
 
-					if (userError && userError.code !== "PGRST116") {
+					// If no user found (PGRST116) and we have session data, create new user
+					if (userError && userError.code === "PGRST116" && data.session.user) {
+						const { data: newUser, error: createError } = await supabase
+							.from("users")
+							.insert({
+								email: data.session.user.email,
+								name: data.session.user.user_metadata.name,
+								profile_pic: data.session.user.user_metadata.avatar_url,
+								created_at: new Date(),
+							})
+							.select()
+							.single();
+
+						if (createError) throw createError;
+						setUser(newUser);
+					} else if (userError) {
+						// For any other error, throw it
 						throw userError;
+					} else {
+						// User exists, set it
+						setUser(userData);
 					}
 
-					setUser(userData || null);
-
-					// If we have a user, check for their app
-					if (userData) {
+					// If we have a user (either existing or newly created), check for their app
+					const currentUser = userData || user;
+					if (currentUser) {
 						const { data: appData, error: appError } = await supabase
 							.from("apps")
 							.select("*")
-							.eq("user_id", userData.id)
+							.eq("user_id", currentUser.id)
 							.single();
 
 						if (appError && appError.code !== "PGRST116") {
