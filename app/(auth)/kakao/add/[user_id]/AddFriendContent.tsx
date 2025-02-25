@@ -67,7 +67,7 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 							window.location.href = data.authorization_url;
 						}}
 					>
-						Continue with KakaoTalk Continue with KakaoTalk
+						Continue with KakaoTalk
 					</Button>
 				</CardContent>
 			</Card>
