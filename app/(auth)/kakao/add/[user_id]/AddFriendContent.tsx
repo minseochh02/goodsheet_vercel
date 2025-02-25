@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 
@@ -61,7 +61,7 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 						asChild
 						className="w-full sm:w-auto bg-[#fee500] hover:bg-[#e6cf00] text-black"
 					>
-						<a href={`/api/authorize-subscription?user_id=${user_id}`}>
+						<a href={`/api/authorize-subscription?user_id=${params.user_id}`}>
 							Continue with KakaoTalk
 						</a>
 					</Button>
