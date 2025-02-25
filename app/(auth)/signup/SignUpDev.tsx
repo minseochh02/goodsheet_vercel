@@ -24,6 +24,8 @@ function SignUpContent() {
 	const redirect_url = searchParams.get("redirect_url");
 	const sheet_id = searchParams.get("sheet_id");
 	const script_id = searchParams.get("script_id");
+	const success = searchParams.get("success");
+	const user_id = searchParams.get("user_id");
 
 	// state management
 	const [user, setUser] = useState<UserData | null>(null);
@@ -36,6 +38,25 @@ function SignUpContent() {
 	const supabase = createClient();
 	// Inside your component
 	const router = useRouter();
+
+	// Handle success parameter
+	useEffect(() => {
+		if (success === "true" && user_id && sheet_id && script_id) {
+			setCurrentStep(4);
+			// Send message to parent (Apps Script)
+			if (window.parent) {
+				window.parent.postMessage(
+					{
+						type: "setup_success",
+						user_id,
+						sheet_id,
+						script_id,
+					},
+					"*"
+				);
+			}
+		}
+	}, [success, user_id, sheet_id, script_id]);
 
 	// Initial auth check - runs only once
 	useEffect(() => {
@@ -143,17 +164,10 @@ function SignUpContent() {
 						if (createError) throw createError;
 						setApp(newApp);
 
-						// call to /api/new-user
-						fetch("/api/new-user", {
-							method: "POST",
-							body: JSON.stringify({
-								user_id: userData.id,
-								sheet_id: sheet_id,
-								script_id: script_id,
-							}),
-						});
-						// if successful, show success message
-						setCurrentStep(4);
+						// if successful, show success message and update the url params
+						router.push(
+							`/signup?success=true&user_id=${userData.id}&sheet_id=${sheet_id}&script_id=${script_id}`
+						);
 					}
 				} else {
 					// User doesn't exist, stay at step 1 for sign in
