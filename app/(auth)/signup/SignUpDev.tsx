@@ -150,8 +150,8 @@ function SignUpContent() {
 								script_id: script_id,
 							}),
 						});
-						// if successful, move to /mypage
-						router.push("/mypage");
+						// if successful, show success message
+						setCurrentStep(4);
 					}
 				} else {
 					// User doesn't exist, stay at step 1 for sign in
@@ -309,7 +309,15 @@ function SignUpContent() {
 			number: 3,
 			title: "Complete Setup",
 			description:
-				"In your copied spreadsheet, click on Extensions > GoodSheetLife > Connect to Google Sheets to complete the setup",
+				"You should be seeing this message if you've clicked on Connect to Google Sheets in your copied spreadsheet",
+			action: handleCompleteSetup,
+			buttonText: "Go to Dashboard",
+			loading: false,
+		},
+		{
+			number: 4,
+			title: "Success",
+			description: "You've successfully created your app",
 			action: handleCompleteSetup,
 			buttonText: "Go to Dashboard",
 			loading: false,
