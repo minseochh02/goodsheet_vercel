@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
-import { MyDashboardContent } from "./MyDashboardContent";
-export default function MyLinksPage() {
+import { MyDashboardContent } from "./DashboardContent";
+
+export default function DashboardPage() {
 	return (
 		<Suspense
 			fallback={

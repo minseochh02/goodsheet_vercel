@@ -37,7 +37,7 @@ interface DashboardData {
 }
 
 import { useEffect, useState } from "react";
-import { User as SupabaseUser } from "@supabase/supabase-js";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -50,7 +50,10 @@ export function MyDashboardContent() {
 		app: null,
 		subscriptions: null,
 	});
+	const [user_id, setUserId] = useState<string | null>(null);
 	const supabase = createClient();
+	const searchParams = useSearchParams();
+	setUserId(searchParams.get("user_id"));
 
 	useEffect(() => {
 		async function fetchDashboardData() {
@@ -58,19 +61,23 @@ export function MyDashboardContent() {
 				setLoading(true);
 				setError(null);
 
-				// Get current user
-				const {
-					data: { user },
-					error: userError,
-				} = await supabase.auth.getUser();
-				if (userError) throw new Error("Failed to get user session");
-				if (!user) throw new Error("No user found");
-
+				if (!user_id) {
+					// Get current user
+					const {
+						data: { user },
+						error: userError,
+					} = await supabase.auth.getUser();
+					if (userError) throw new Error("Failed to get user session");
+					if (!user) {
+						throw new Error("No user found");
+					}
+					setUserId(user.id);
+				}
 				// Fetch user details
 				const { data: userData, error: userDetailsError } = await supabase
 					.from("users")
 					.select("*")
-					.eq("id", user.id)
+					.eq("id", user_id)
 					.single();
 				if (userDetailsError) throw new Error("Failed to fetch user details");
 
@@ -78,7 +85,7 @@ export function MyDashboardContent() {
 				const { data: appData, error: appError } = await supabase
 					.from("apps")
 					.select("*")
-					.eq("user_id", user.id)
+					.eq("user_id", user_id)
 					.single();
 				if (appError) throw new Error("Failed to fetch app data");
 
@@ -88,7 +95,7 @@ export function MyDashboardContent() {
 					const { data: subData, error: subError } = await supabase
 						.from("subscriptions")
 						.select("*")
-						.eq("user_id", user.id)
+						.eq("user_id", user_id)
 						.single();
 					if (subError) throw new Error("Failed to fetch subscription data");
 					subscriptionData = subData;
