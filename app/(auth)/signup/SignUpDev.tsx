@@ -85,7 +85,6 @@ function SignUpContent() {
 	// Handle URL params scenario (Scenario A)
 	useEffect(() => {
 		if (!email || !sheet_id || !script_id || loading) return;
-
 		const handleEmailParams = async () => {
 			try {
 				// Check if user exists by email
@@ -137,6 +136,9 @@ function SignUpContent() {
 
 						if (createError) throw createError;
 						setApp(newApp);
+
+						// move to /mypage
+						redirect("/mypage");
 					}
 				} else {
 					// User doesn't exist, stay at step 1 for sign in
