@@ -11,7 +11,7 @@ export function KakaoSuccessAddContent() {
 	const user_id = searchParams.get("user_id");
 	const router = useRouter();
 	const supabase = createClient();
-	const [subscription, setSubscription] = useState<UserData | null>(null);
+	const [user, setUser] = useState<UserData | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -30,19 +30,7 @@ export function KakaoSuccessAddContent() {
 				return;
 			}
 
-			const { data: subscription, error: subscriptionError } = await supabase
-				.from("subscriptions")
-				.select("*")
-				.eq("user_id", user_id)
-				.single();
-
-			if (subscriptionError) {
-				console.error("Error fetching subscription:", subscriptionError);
-				setLoading(false);
-				return;
-			}
-
-			setSubscription(subscription);
+			setUser(user);
 			setLoading(false);
 		};
 
@@ -55,8 +43,8 @@ export function KakaoSuccessAddContent() {
 		<div>
 			{loading ? (
 				<p>Loading subscription details...</p>
-			) : subscription ? (
-				<h1>Successfully subscribed to {subscription.name}</h1>
+			) : user ? (
+				<h1>Successfully subscribed to {user.name}</h1>
 			) : (
 				<p>Subscription information not found.</p>
 			)}
