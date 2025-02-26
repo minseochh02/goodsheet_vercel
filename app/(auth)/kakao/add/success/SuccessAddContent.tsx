@@ -36,7 +36,7 @@ export function KakaoSuccessAddContent() {
 			setSubscription(subscription);
 		};
 		fetchSubscriptionInfo();
-	}, []);
+	}, [user_id]);
 
 	return (
 		<div>
