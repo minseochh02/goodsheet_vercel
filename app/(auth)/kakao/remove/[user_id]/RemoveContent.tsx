@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function KakaoRemoveContent({
@@ -12,14 +12,30 @@ export function KakaoRemoveContent({
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [subscriber_id, setSubscriberId] = useState<string | null>(null);
+
+	// get subscriber_id from url
+	useEffect(() => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const subscriberId = urlParams.get("subscriber_id");
+		if (subscriberId) {
+			setSubscriberId(subscriberId);
+		}
+	}, []);
 
 	const handleUnsubscribe = async () => {
 		try {
 			setIsLoading(true);
-			setError(null);
-			// TODO: Implement actual unsubscribe API call here
-			await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
-			router.push("/api/kakao/unsubscribe-success"); // TODO: Create success page
+			// make api call to /api/kakao/unsubscribe
+			const response = await fetch("/api/kakao/unsubscribe", {
+				method: "POST",
+				body: JSON.stringify({ user_id: params.user_id, subscriber_id }),
+			});
+			if (response.ok) {
+				router.push("/api/kakao/unsubscribe-success"); // TODO: Create success page
+			} else {
+				setError("Failed to unsubscribe. Please try again later.");
+			}
 		} catch (err) {
 			setError("Failed to unsubscribe. Please try again later.");
 		} finally {
