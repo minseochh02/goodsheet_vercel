@@ -36,6 +36,13 @@ interface Subscription {
 	id: string;
 	user_id: string;
 	subscriptions: string[] | null;
+	friend_ids: Array<{
+		id: number;
+		uuid: string;
+		name: string;
+		account_id: string;
+		profile_image?: string;
+	}> | null;
 	created_at: string;
 }
 
@@ -227,14 +234,44 @@ export function MyDashboardContent() {
 							<CardTitle>Subscriptions</CardTitle>
 						</CardHeader>
 						<CardContent>
-							{data.subscriptions?.subscriptions?.length ? (
-								<ul className="list-disc pl-4">
-									{data.subscriptions.subscriptions.map((sub, index) => (
-										<li key={index}>{sub}</li>
-									))}
-								</ul>
+							{data.subscriptions?.friend_ids?.length ? (
+								<div className="space-y-4">
+									{data.subscriptions.friend_ids.map((friend) => {
+										const isSubscribed =
+											data.subscriptions?.subscriptions?.includes(friend.uuid);
+										return (
+											<div
+												key={friend.id}
+												className="flex items-center justify-between"
+											>
+												<div className="flex items-center space-x-3">
+													<Avatar className="h-10 w-10">
+														<AvatarImage src={friend.profile_image} />
+														<AvatarFallback>{friend.name[0]}</AvatarFallback>
+													</Avatar>
+													<span>{friend.name}</span>
+												</div>
+												<Button
+													variant={isSubscribed ? "outline" : "default"}
+													size="sm"
+													onClick={() => {
+														// TODO: Implement subscribe/unsubscribe functionality
+														console.log(
+															isSubscribed
+																? "Unsubscribe from"
+																: "Subscribe to",
+															friend.name
+														);
+													}}
+												>
+													{isSubscribed ? "Subscribed" : "Invite"}
+												</Button>
+											</div>
+										);
+									})}
+								</div>
 							) : (
-								<p>No active subscriptions</p>
+								<p>No friends available</p>
 							)}
 						</CardContent>
 					</Card>
