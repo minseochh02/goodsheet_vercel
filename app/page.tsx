@@ -57,11 +57,12 @@ export default function Home() {
 				{/* Hero Section */}
 				<section className="text-center mb-16">
 					<h1 className="text-5xl font-bold mb-6 text-gray-800">
-						Manage Your Workspace with Ease
+						Send KakaoTalk Messages with Spreadsheets
 					</h1>
 					<p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-						Streamline your document signing process with our secure, efficient,
-						and user-friendly digital signature platform.
+						A convenient service that allows you to send KakaoTalk messages
+						through spreadsheets. Improve work efficiency and use it for
+						marketing, customer management, and more.
 					</p>
 					<ClientOnly>
 						<div className="flex justify-center gap-4">
@@ -87,32 +88,35 @@ export default function Home() {
 				{/* Features Section */}
 				<section className="grid md:grid-cols-3 gap-8 mb-16">
 					<div className="bg-white p-6 rounded-xl shadow-sm">
-						<h3 className="text-xl font-semibold mb-2">Secure Signing</h3>
+						<h3 className="text-xl font-semibold mb-2">Easy Setup</h3>
 						<p className="text-gray-600">
-							Advanced encryption and authentication to keep your documents
-							safe.
+							After signing up, create a spreadsheet copy and log in to
+							KakaoTalk through the extension.
 						</p>
 					</div>
 					<div className="bg-white p-6 rounded-xl shadow-sm">
-						<h3 className="text-xl font-semibold mb-2">Easy Integration</h3>
+						<h3 className="text-xl font-semibold mb-2">
+							Friend List Integration
+						</h3>
 						<p className="text-gray-600">
-							Seamlessly integrate with your existing workflow and tools.
+							View and manage your KakaoTalk friend list directly in the
+							spreadsheet.
 						</p>
 					</div>
 					<div className="bg-white p-6 rounded-xl shadow-sm">
-						<h3 className="text-xl font-semibold mb-2">Track & Manage</h3>
+						<h3 className="text-xl font-semibold mb-2">Message Sending</h3>
 						<p className="text-gray-600">
-							Monitor document status and manage signatures in real-time.
+							Write and send KakaoTalk messages directly from your spreadsheet.
 						</p>
 					</div>
 				</section>
 
 				{/* CTA Section */}
 				<section className="text-center bg-blue-600 text-white rounded-2xl p-12">
-					<h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+					<h2 className="text-3xl font-bold mb-4">Start Now!</h2>
 					<p className="text-xl mb-8 opacity-90">
-						Join thousands of businesses using GoodSlideLife for their document
-						signing needs
+						Join GoodSheetLife for a new way to send KakaoTalk messages with
+						spreadsheets
 					</p>
 					{isAuthenticated ? (
 						<Link
@@ -126,7 +130,7 @@ export default function Home() {
 							href={"/signup"}
 							className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors"
 						>
-							Create Your Account
+							Create Account
 						</Link>
 					)}
 				</section>
