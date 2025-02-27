@@ -14,7 +14,8 @@ export interface AppData {
 	kakao: {
 		nickname: string | null;
 		profile_image: string | null;
-		token: string | null;
+		access_token: string | null;
+		refresh_token: string | null;
 		message_count: number | null;
 	}
 }

@@ -207,14 +207,14 @@ export function MyDashboardContent() {
 						<div className="flex justify-between">
 							<span>Kakao:</span>
 							<span>
-								{data.app?.kakao?.token ? "Connected" : "Not connected"}
+								{data.app?.kakao?.access_token ? "Connected" : "Not connected"}
 							</span>
 						</div>
 					</div>
 				</CardContent>
 			</Card>
 			{/* Connect to KakaoTalk Card, show if kakao does not exist */}
-			{!data.app?.kakao?.token && (
+			{!data.app?.kakao?.access_token && (
 				<Card>
 					<CardHeader>
 						<CardTitle>Connect to KakaoTalk</CardTitle>
@@ -237,7 +237,7 @@ export function MyDashboardContent() {
 				</Card>
 			)}
 			{/* Subscription Card - Only show if kakao exists */}
-			{data.app?.kakao?.token && (
+			{data.app?.kakao?.access_token && (
 				<>
 					<Card>
 						<CardHeader>
