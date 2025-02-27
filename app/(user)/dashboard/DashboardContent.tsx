@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
 	KakaoFriend,
 	UserData,
@@ -239,6 +240,28 @@ export function MyDashboardContent() {
 													<Button
 														variant={isSubscribed ? "outline" : "default"}
 														size="sm"
+														onClick={() => {
+															if (!isSubscribed) {
+																const inviteUrl = `https://goodsheet-vercel.vercel.app/kakao/add/${user_id}`;
+																navigator.clipboard
+																	.writeText(inviteUrl)
+																	.then(() => {
+																		toast.success("Invite link copied!", {
+																			description:
+																				"Share this link with your friend to invite them.",
+																			duration: 3000,
+																		});
+																	})
+																	.catch((err) => {
+																		console.error("Failed to copy: ", err);
+																		toast.error("Failed to copy", {
+																			description:
+																				"Please try again or copy manually.",
+																			duration: 3000,
+																		});
+																	});
+															}
+														}}
 													>
 														{isSubscribed ? "Subscribed" : "Invite"}
 													</Button>
