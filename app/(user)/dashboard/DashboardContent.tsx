@@ -126,6 +126,51 @@ export function MyDashboardContent() {
 		);
 	}
 
+	const copyToClipboard = async (text: string): Promise<void> => {
+		try {
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				await navigator.clipboard.writeText(text);
+				toast.success("Invite link copied!", {
+					description: "Share this link with your friend to invite them.",
+					duration: 3000,
+				});
+			} else {
+				fallbackCopyToClipboard(text);
+			}
+		} catch (err) {
+			fallbackCopyToClipboard(text);
+		}
+	};
+
+	const fallbackCopyToClipboard = (text: string): void => {
+		const textArea = document.createElement("textarea");
+		textArea.value = text;
+		textArea.style.position = "fixed";
+		textArea.style.left = "-999999px";
+		textArea.style.top = "-999999px";
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+
+		try {
+			const successful = document.execCommand("copy");
+			if (successful) {
+				toast.success("Invite link copied!", {
+					description: "Share this link with your friend to invite them.",
+					duration: 3000,
+				});
+			}
+		} catch (err) {
+			console.error("Failed to copy: ", err);
+			toast.error("Failed to copy", {
+				description: "Please try again or copy manually.",
+				duration: 3000,
+			});
+		}
+
+		document.body.removeChild(textArea);
+	};
+
 	return (
 		<div className="space-y-6 p-4">
 			{/* User Profile Card */}
@@ -243,23 +288,7 @@ export function MyDashboardContent() {
 														onClick={() => {
 															if (!isSubscribed) {
 																const inviteUrl = `https://goodsheet-vercel.vercel.app/kakao/add/${user_id}`;
-																navigator.clipboard
-																	.writeText(inviteUrl)
-																	.then(() => {
-																		toast.success("Invite link copied!", {
-																			description:
-																				"Share this link with your friend to invite them.",
-																			duration: 3000,
-																		});
-																	})
-																	.catch((err) => {
-																		console.error("Failed to copy: ", err);
-																		toast.error("Failed to copy", {
-																			description:
-																				"Please try again or copy manually.",
-																			duration: 3000,
-																		});
-																	});
+																copyToClipboard(inviteUrl);
 															}
 														}}
 													>
