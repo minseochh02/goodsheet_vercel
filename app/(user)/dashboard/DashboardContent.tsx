@@ -85,7 +85,7 @@ export function MyDashboardContent() {
 
 				// Only fetch subscriptions if kakao exists
 				let subscriptionData = null;
-				if (appData?.kakao?.token) {
+				if (appData?.kakao?.access_token) {
 					const { data: subData, error: subError } = await supabase
 						.from("subscriptions")
 						.select("*")
