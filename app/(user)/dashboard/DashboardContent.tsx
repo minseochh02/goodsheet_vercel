@@ -213,22 +213,32 @@ export function MyDashboardContent() {
 			)}
 			{/* Subscription Card - Only show if kakao exists */}
 			{data.app?.kakao?.token && (
-				<Card>
-					<CardHeader>
-						<CardTitle>Subscriptions</CardTitle>
-					</CardHeader>
-					<CardContent>
-						{data.subscriptions?.subscriptions?.length ? (
-							<ul className="list-disc pl-4">
-								{data.subscriptions.subscriptions.map((sub, index) => (
-									<li key={index}>{sub}</li>
-								))}
-							</ul>
-						) : (
-							<p>No active subscriptions</p>
-						)}
-					</CardContent>
-				</Card>
+				<>
+					<Card>
+						<CardHeader>
+							<CardTitle>Message Count</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<p>{data.app?.kakao?.message_count}</p>
+						</CardContent>
+					</Card>
+					<Card>
+						<CardHeader>
+							<CardTitle>Subscriptions</CardTitle>
+						</CardHeader>
+						<CardContent>
+							{data.subscriptions?.subscriptions?.length ? (
+								<ul className="list-disc pl-4">
+									{data.subscriptions.subscriptions.map((sub, index) => (
+										<li key={index}>{sub}</li>
+									))}
+								</ul>
+							) : (
+								<p>No active subscriptions</p>
+							)}
+						</CardContent>
+					</Card>
+				</>
 			)}
 		</div>
 	);
