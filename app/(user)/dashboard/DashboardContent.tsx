@@ -8,42 +8,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import {
+	KakaoFriend,
+	UserData,
+	AppData,
+	SubscriptionData,
+} from "@/utils/types/data";
+
 // Create supabase client once outside component
 const supabase = createClient();
 
-interface User {
-	id: string;
-	name: string | null;
-	email: string;
-	profile_pic: string | null;
-	created_at: string;
-}
-
-interface App {
-	id: string;
-	user_id: string;
-	sheet_id: string | null;
-	script_id: string | null;
-	kakao: {
-		nickname: string | null;
-		profile_image: string | null;
-		token: string | null;
-		message_count: number | null;
-	} | null;
-}
-
-interface Subscription {
-	id: string;
-	user_id: string;
-	subscriptions: string | null;
-	friend_ids: string | null;
-	created_at: string;
-}
-
 interface DashboardData {
-	user: User | null;
-	app: App | null;
-	subscriptions: Subscription | null;
+	user: UserData | null;
+	app: AppData | null;
+	subscriptions: SubscriptionData | null;
 }
 
 export function MyDashboardContent() {
@@ -230,14 +208,16 @@ export function MyDashboardContent() {
 						<CardContent>
 							{data.subscriptions?.friend_ids ? (
 								<div className="space-y-4">
-									{JSON.parse(data.subscriptions.friend_ids || "[]").map(
-										(friend: any) => {
-											const subscriptionsArray = data.subscriptions
-												?.subscriptions
-												? JSON.parse(data.subscriptions.subscriptions)
-												: [];
+									{(() => {
+										const friendsArray = JSON.parse(
+											data.subscriptions?.friend_ids || "[]"
+										);
+										const subscriptionsArray =
+											data.subscriptions?.subscriptions || [];
+
+										return friendsArray.map((friend: KakaoFriend) => {
 											const isSubscribed = subscriptionsArray.includes(
-												friend.uuid
+												friend.id.toString()
 											);
 
 											return (
@@ -247,10 +227,14 @@ export function MyDashboardContent() {
 												>
 													<div className="flex items-center space-x-3">
 														<Avatar className="h-10 w-10">
-															<AvatarImage src={friend.profile_image} />
-															<AvatarFallback>{friend.name[0]}</AvatarFallback>
+															<AvatarImage
+																src={friend.profile_thumbnail_image}
+															/>
+															<AvatarFallback>
+																{friend.profile_nickname[0]}
+															</AvatarFallback>
 														</Avatar>
-														<span>{friend.name}</span>
+														<span>{friend.profile_nickname}</span>
 													</div>
 													<Button
 														variant={isSubscribed ? "outline" : "default"}
@@ -260,8 +244,8 @@ export function MyDashboardContent() {
 													</Button>
 												</div>
 											);
-										}
-									)}
+										});
+									})()}
 								</div>
 							) : (
 								<p>No friends available</p>
