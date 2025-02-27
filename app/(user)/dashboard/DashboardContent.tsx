@@ -35,14 +35,8 @@ interface App {
 interface Subscription {
 	id: string;
 	user_id: string;
-	subscriptions: string[] | null;
-	friend_ids: Array<{
-		id: number;
-		uuid: string;
-		name: string;
-		account_id: string;
-		profile_image?: string;
-	}> | null;
+	subscriptions: string | null;
+	friend_ids: string | null;
 	created_at: string;
 }
 
@@ -234,41 +228,40 @@ export function MyDashboardContent() {
 							<CardTitle>Subscriptions</CardTitle>
 						</CardHeader>
 						<CardContent>
-							{data.subscriptions?.friend_ids?.length ? (
+							{data.subscriptions?.friend_ids ? (
 								<div className="space-y-4">
-									{data.subscriptions.friend_ids.map((friend) => {
-										const isSubscribed =
-											data.subscriptions?.subscriptions?.includes(friend.uuid);
-										return (
-											<div
-												key={friend.id}
-												className="flex items-center justify-between"
-											>
-												<div className="flex items-center space-x-3">
-													<Avatar className="h-10 w-10">
-														<AvatarImage src={friend.profile_image} />
-														<AvatarFallback>{friend.name[0]}</AvatarFallback>
-													</Avatar>
-													<span>{friend.name}</span>
-												</div>
-												<Button
-													variant={isSubscribed ? "outline" : "default"}
-													size="sm"
-													onClick={() => {
-														// TODO: Implement subscribe/unsubscribe functionality
-														console.log(
-															isSubscribed
-																? "Unsubscribe from"
-																: "Subscribe to",
-															friend.name
-														);
-													}}
+									{JSON.parse(data.subscriptions.friend_ids || "[]").map(
+										(friend: any) => {
+											const subscriptionsArray = data.subscriptions
+												?.subscriptions
+												? JSON.parse(data.subscriptions.subscriptions)
+												: [];
+											const isSubscribed = subscriptionsArray.includes(
+												friend.uuid
+											);
+
+											return (
+												<div
+													key={friend.id}
+													className="flex items-center justify-between"
 												>
-													{isSubscribed ? "Subscribed" : "Invite"}
-												</Button>
-											</div>
-										);
-									})}
+													<div className="flex items-center space-x-3">
+														<Avatar className="h-10 w-10">
+															<AvatarImage src={friend.profile_image} />
+															<AvatarFallback>{friend.name[0]}</AvatarFallback>
+														</Avatar>
+														<span>{friend.name}</span>
+													</div>
+													<Button
+														variant={isSubscribed ? "outline" : "default"}
+														size="sm"
+													>
+														{isSubscribed ? "Subscribed" : "Invite"}
+													</Button>
+												</div>
+											);
+										}
+									)}
 								</div>
 							) : (
 								<p>No friends available</p>
