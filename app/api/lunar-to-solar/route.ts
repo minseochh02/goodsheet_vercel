@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({ lunar_dates }),
         });
 
-        return NextResponse.json({ message: "Lunar to solar conversion successful" });
+        // Parse the response and return the actual data
+        const responseData = await response.json();
+        
+        return NextResponse.json(responseData);
     } catch (error) {
         console.error(error);
         return NextResponse.json({ message: "Error converting lunar to solar" }, { status: 500 });
