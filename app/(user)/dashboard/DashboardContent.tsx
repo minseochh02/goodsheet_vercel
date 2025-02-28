@@ -36,6 +36,10 @@ export function MyDashboardContent() {
 	const [user_id, setUserId] = useState<string | null>(null);
 	const searchParams = useSearchParams();
 	const router = useRouter();
+
+	// Add a state to track if we need to refresh data
+	const [refreshTrigger, setRefreshTrigger] = useState(0);
+
 	useEffect(() => {
 		async function checkAuth() {
 			const urlUserId = searchParams.get("user_id");
@@ -58,6 +62,25 @@ export function MyDashboardContent() {
 
 		checkAuth();
 	}, [searchParams]);
+
+	// Add an effect to listen for messages from the Kakao connection window
+	useEffect(() => {
+		const handleMessage = (event: MessageEvent) => {
+			// Check if the message is from our Kakao success page
+			if (event.data && event.data.type === "kakao_success") {
+				// Trigger a refresh of the dashboard data
+				setRefreshTrigger((prev) => prev + 1);
+			}
+		};
+
+		// Add event listener for messages
+		window.addEventListener("message", handleMessage);
+
+		// Clean up the event listener when component unmounts
+		return () => {
+			window.removeEventListener("message", handleMessage);
+		};
+	}, []);
 
 	useEffect(() => {
 		async function fetchDashboardData() {
@@ -108,7 +131,7 @@ export function MyDashboardContent() {
 		}
 
 		fetchDashboardData();
-	}, [user_id]);
+	}, [user_id, refreshTrigger]); // Add refreshTrigger as a dependency
 
 	if (loading) {
 		return (
@@ -222,13 +245,11 @@ export function MyDashboardContent() {
 					<CardContent>
 						<Button
 							onClick={() => {
-								// // open new tab
-								// window.open(
-								// 	window.location.origin + "/kakao?user_id=" + user_id,
-								// 	"_blank"
-								// );
-								// test within modal
-								router.push("/kakao?user_id=" + user_id);
+								// open new tab
+								window.open(
+									window.location.origin + "/kakao?user_id=" + user_id,
+									"_blank"
+								);
 							}}
 						>
 							Connect to KakaoTalk
