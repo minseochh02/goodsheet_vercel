@@ -59,7 +59,7 @@ export default function RootLayout({
 									className="font-bold hover:underline"
 									rel="noreferrer"
 								>
-									(주)쿠스 | QUUS Inc.
+									(주)쿠스 | QUUS LLC.
 								</a>
 							</p>
 							<p>Email: quus.aispace@gmail.com | Tel: 010-7523-5071</p>
