@@ -12,33 +12,35 @@ export function KakaoRemoveContent({
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [subscriber_id, setSubscriberId] = useState<string | null>(null);
+	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-	// get subscriber_id from url
-	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const subscriberId = urlParams.get("subscriber_id");
-		if (subscriberId) {
-			setSubscriberId(subscriberId);
-		}
-	}, []);
+	// Function to authenticate with Kakao
+	const authenticateWithKakao = () => {
+		setIsAuthenticating(true);
+		// Kakao OAuth URL
+		const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+		const redirectUri = encodeURIComponent(
+			`${window.location.origin}/api/kakao/unsubscribe-callback`
+		);
+		const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${redirectUri}&response_type=code&state=${params.user_id}`;
+
+		// Redirect to Kakao auth
+		window.location.href = kakaoAuthUrl;
+	};
 
 	const handleUnsubscribe = async () => {
 		try {
 			setIsLoading(true);
-			// make api call to /api/kakao/unsubscribe
-			const response = await fetch("/api/kakao/unsubscribe", {
-				method: "POST",
-				body: JSON.stringify({ user_id: params.user_id, subscriber_id }),
-			});
-			if (response.ok) {
-				router.push("/api/kakao/unsubscribe-success"); // TODO: Create success page
-			} else {
-				setError("Failed to unsubscribe. Please try again later.");
-			}
+
+			// First authenticate with Kakao to get the subscriber's ID
+			authenticateWithKakao();
+
+			// The actual unsubscribe will happen after Kakao authentication callback
+			// See the unsubscribe-callback API route
 		} catch (err) {
-			setError("Failed to unsubscribe. Please try again later.");
-		} finally {
+			setError(
+				"Failed to initiate unsubscribe process. Please try again later."
+			);
 			setIsLoading(false);
 		}
 	};
@@ -94,10 +96,14 @@ export function KakaoRemoveContent({
 					<div className="flex flex-col space-y-4">
 						<Button
 							onClick={handleUnsubscribe}
-							disabled={isLoading}
+							disabled={isLoading || isAuthenticating}
 							className="w-full bg-red-600 hover:bg-red-700 text-white"
 						>
-							{isLoading ? "Unsubscribing..." : "Yes, Unsubscribe Me"}
+							{isLoading
+								? "Processing..."
+								: isAuthenticating
+									? "Authenticating with Kakao..."
+									: "Yes, Unsubscribe Me"}
 						</Button>
 						<Button
 							onClick={() => {
@@ -105,7 +111,7 @@ export function KakaoRemoveContent({
 							}}
 							variant="outline"
 							className="w-full"
-							disabled={isLoading}
+							disabled={isLoading || isAuthenticating}
 						>
 							Cancel
 						</Button>
