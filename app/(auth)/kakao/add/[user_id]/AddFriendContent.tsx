@@ -34,41 +34,53 @@ export function KakaoAddContent({ params }: { params: { user_id: string } }) {
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-6">
-					<div className="text-muted-foreground">
-						<Avatar>
-							<AvatarImage src={profile_pic} />
-							<AvatarFallback>{user_name?.charAt(0)}</AvatarFallback>
-						</Avatar>
-						<p className="mb-4">
-							You're about to agree to receiving messages from
-							<span className="font-semibold"> {user_name}</span> on
-							GoodSheetLife.
-						</p>
-						<p className="mb-2">
-							By proceeding, you agree to allow this user to:
-						</p>
-						<ul className="list-disc pl-6 mb-4 text-left">
-							<li>View your KakaoTalk profile information</li>
-							<li>Send you KakaoTalk messages through GoodSheetLife</li>
-						</ul>
-						<p>
-							This connection will help them send you automated messages through
-							Google Sheets.
-						</p>
+					<div className="flex flex-col items-center text-muted-foreground">
+						<div className="mb-4">
+							<Avatar className="h-20 w-20">
+								<AvatarImage src={profile_pic} />
+								<AvatarFallback className="text-lg">
+									{user_name?.charAt(0)}
+								</AvatarFallback>
+							</Avatar>
+						</div>
+
+						<div className="text-center mb-6">
+							<p className="mb-4">
+								You're about to agree to receiving messages from
+								<span className="font-semibold"> {user_name}</span> on
+								GoodSheetLife.
+							</p>
+						</div>
+
+						<div className="w-full">
+							<p className="mb-2 font-medium">
+								By proceeding, you agree to allow this user to:
+							</p>
+							<ul className="list-disc pl-6 mb-4 text-left">
+								<li>View your KakaoTalk profile information</li>
+								<li>Send you KakaoTalk messages through GoodSheetLife</li>
+							</ul>
+							<p className="text-sm">
+								This connection will help them send you automated messages
+								through Google Sheets.
+							</p>
+						</div>
 					</div>
 
-					<Button
-						className="w-full sm:w-auto bg-[#fee500] hover:bg-[#e6cf00] text-black"
-						onClick={async () => {
-							const response = await fetch(
-								`/api/kakao/subscription?user_id=${params.user_id}`
-							);
-							const data = await response.json();
-							window.location.href = data.authorization_url;
-						}}
-					>
-						Continue with KakaoTalk
-					</Button>
+					<div className="flex justify-center mt-6">
+						<Button
+							className="w-full sm:w-auto bg-[#fee500] hover:bg-[#e6cf00] text-black font-medium px-8"
+							onClick={async () => {
+								const response = await fetch(
+									`/api/kakao/subscription?user_id=${params.user_id}`
+								);
+								const data = await response.json();
+								window.location.href = data.authorization_url;
+							}}
+						>
+							Continue with KakaoTalk
+						</Button>
+					</div>
 				</CardContent>
 			</Card>
 		</div>

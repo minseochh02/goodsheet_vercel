@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/client";
 import { UserData } from "@/utils/types/data";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle2, Loader2, UserMinus } from "lucide-react";
 
 export function KakaoSuccessRemoveContent() {
 	const searchParams = useSearchParams();
@@ -40,14 +42,56 @@ export function KakaoSuccessRemoveContent() {
 	}, [user_id, supabase]);
 
 	return (
-		<div>
-			{loading ? (
-				<p>Unsubscribed successfully</p>
-			) : user ? (
-				<h1>Successfully unsubscribed from {user.name}</h1>
-			) : (
-				<p>Unsubscription information not found.</p>
-			)}
+		<div className="container mx-auto max-w-2xl p-6 min-h-[50vh] flex items-center justify-center">
+			<Card className="w-full bg-card shadow-lg">
+				<CardHeader>
+					<CardTitle className="text-2xl font-bold text-center">
+						Unsubscription Status
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-6">
+					<div className="flex flex-col items-center text-center p-4">
+						{loading ? (
+							<div className="flex flex-col items-center space-y-4">
+								<Loader2 className="h-12 w-12 text-primary animate-spin" />
+								<p className="text-lg text-muted-foreground">
+									Processing your unsubscription...
+								</p>
+							</div>
+						) : user ? (
+							<div className="flex flex-col items-center space-y-4">
+								<div className="relative">
+									<UserMinus className="h-16 w-16 text-red-500" />
+									<CheckCircle2 className="h-8 w-8 text-green-500 absolute -bottom-2 -right-2" />
+								</div>
+								<h2 className="text-xl font-semibold">
+									Unsubscribed Successfully
+								</h2>
+								<p className="text-lg">
+									You have successfully unsubscribed from{" "}
+									<span className="font-semibold">{user.name}</span>
+								</p>
+								<p className="text-sm text-muted-foreground mt-2">
+									You will no longer receive messages from this user through
+									GoodSheetLife.
+								</p>
+								<Button className="mt-6" onClick={() => router.push("/")}>
+									Return to Home
+								</Button>
+							</div>
+						) : (
+							<div className="flex flex-col items-center space-y-4">
+								<p className="text-lg text-muted-foreground">
+									Unsubscription information not found.
+								</p>
+								<Button className="mt-4" onClick={() => router.push("/")}>
+									Return to Home
+								</Button>
+							</div>
+						)}
+					</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

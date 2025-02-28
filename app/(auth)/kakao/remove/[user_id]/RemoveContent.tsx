@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangle, Loader2 } from "lucide-react";
 
 export function KakaoRemoveContent({
 	params,
@@ -49,83 +51,99 @@ export function KakaoRemoveContent({
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50">
-			<div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
-				<div className="text-center">
-					<h2 className="mt-6 text-3xl font-bold text-gray-900">
+		<div className="container mx-auto max-w-2xl p-6 min-h-[70vh] flex items-center justify-center">
+			<Card className="w-full bg-card shadow-lg">
+				<CardHeader className="pb-4">
+					<CardTitle className="text-2xl font-bold text-center">
 						Unsubscribe Confirmation
-					</h2>
-					<Avatar>
-						<AvatarImage src={profile_pic} />
-						<AvatarFallback>{user_name?.charAt(0)}</AvatarFallback>
-					</Avatar>
-					<p className="mt-2 text-sm text-gray-600">
-						You are about to stop receiving messages from
-					</p>
-					<span className="font-semibold"> {user_name}</span> on GoodSheetLife.
-				</div>
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-6">
+					<div className="flex flex-col items-center text-center">
+						<div className="mb-4">
+							<Avatar className="h-20 w-20">
+								<AvatarImage src={profile_pic} />
+								<AvatarFallback className="text-lg">
+									{user_name?.charAt(0)}
+								</AvatarFallback>
+							</Avatar>
+						</div>
+						<div className="mb-6">
+							<p className="text-lg">
+								You are about to stop receiving messages from
+								<span className="font-semibold"> {user_name}</span> on
+								GoodSheetLife.
+							</p>
+						</div>
 
-				<div className="mt-8 space-y-6">
-					<div className="rounded-md bg-yellow-50 p-4">
-						<div className="flex">
-							<div className="ml-3">
-								<h3 className="text-sm font-medium text-yellow-800">
-									Please Note
-								</h3>
-								<div className="mt-2 text-sm text-yellow-700">
-									<p>
-										By clicking continue, you will no longer receive messages
-										from this channel through GoodSheetLife. This action will:
-									</p>
-									<ul className="list-disc list-inside mt-2">
-										<li>Stop all notifications from this sender</li>
-										<li>Remove your subscription to this channel</li>
-										<li>
-											Require re-subscription if you want to receive messages
-											again
-										</li>
-									</ul>
+						<div className="w-full rounded-md bg-amber-50 p-5 border border-amber-200 mb-6">
+							<div className="flex items-start">
+								<AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 mr-2" />
+								<div>
+									<h3 className="text-sm font-medium text-amber-800">
+										Please Note
+									</h3>
+									<div className="mt-2 text-sm text-amber-700">
+										<p>
+											By clicking continue, you will no longer receive messages
+											from this channel through GoodSheetLife. This action will:
+										</p>
+										<ul className="list-disc list-inside mt-2 space-y-1">
+											<li>Stop all notifications from this sender</li>
+											<li>Remove your subscription to this channel</li>
+											<li>
+												Require re-subscription if you want to receive messages
+												again
+											</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					{error && (
-						<div className="rounded-md bg-red-50 p-4">
-							<div className="flex">
-								<div className="ml-3">
-									<h3 className="text-sm font-medium text-red-800">Error</h3>
-									<div className="mt-2 text-sm text-red-700">{error}</div>
+						{error && (
+							<div className="w-full rounded-md bg-red-50 p-4 border border-red-200 mb-4">
+								<div className="flex items-start">
+									<AlertTriangle className="h-5 w-5 text-red-600 mt-0.5 mr-2" />
+									<div>
+										<h3 className="text-sm font-medium text-red-800">Error</h3>
+										<div className="mt-1 text-sm text-red-700">{error}</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					)}
+						)}
 
-					<div className="flex flex-col space-y-4">
-						<Button
-							onClick={handleUnsubscribe}
-							disabled={isLoading || isAuthenticating}
-							className="w-full bg-red-600 hover:bg-red-700 text-white"
-						>
-							{isLoading
-								? "Processing..."
-								: isAuthenticating
-									? "Authenticating with Kakao..."
-									: "Yes, Unsubscribe Me"}
-						</Button>
-						<Button
-							onClick={() => {
-								window.history.back();
-							}}
-							variant="outline"
-							className="w-full"
-							disabled={isLoading || isAuthenticating}
-						>
-							Cancel
-						</Button>
+						<div className="flex flex-col space-y-4 w-full max-w-sm mx-auto">
+							<Button
+								onClick={handleUnsubscribe}
+								disabled={isLoading || isAuthenticating}
+								className="w-full bg-red-600 hover:bg-red-700 text-white font-medium"
+							>
+								{isLoading ? (
+									<>
+										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+										Processing...
+									</>
+								) : isAuthenticating ? (
+									"Authenticating with Kakao..."
+								) : (
+									"Yes, Unsubscribe Me"
+								)}
+							</Button>
+							<Button
+								onClick={() => {
+									window.history.back();
+								}}
+								variant="outline"
+								className="w-full"
+								disabled={isLoading || isAuthenticating}
+							>
+								Cancel
+							</Button>
+						</div>
 					</div>
-				</div>
-			</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }
