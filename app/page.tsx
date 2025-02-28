@@ -76,7 +76,7 @@ export default function Home() {
 							) : (
 								<Link
 									href={"/signup"}
-									className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors"
+									className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
 								>
 									Get Started
 								</Link>
