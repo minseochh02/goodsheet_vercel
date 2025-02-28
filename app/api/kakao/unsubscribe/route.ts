@@ -5,8 +5,7 @@ export async function GET(request: NextRequest) {
     
     // make call to fastapi backend
     const response = await fetch("https://minseochh02-goodsheet.hf.space/authorize-unsubscribe?user_id=" + user_id, {
-        method: "POST",
-        body: JSON.stringify({ user_id }),
+        method: "GET",
     });
     
     const data = await response.json();
