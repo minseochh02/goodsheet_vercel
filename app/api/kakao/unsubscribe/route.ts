@@ -4,7 +4,7 @@ export async function POST(request: NextRequest) {
     const { user_id } = await request.json();
     
     // make call to fastapi backend
-    const response = await fetch("https://minseochh02-goodsheet.hf.space/kakao/unsubscribe", {
+    const response = await fetch("https://minseochh02-goodsheet.hf.space/kakao/unsubscribe?user_id=" + user_id, {
         method: "POST",
         body: JSON.stringify({ user_id }),
     });

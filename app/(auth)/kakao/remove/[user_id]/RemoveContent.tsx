@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function KakaoRemoveContent({
 	params,
@@ -13,30 +15,31 @@ export function KakaoRemoveContent({
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
+	const [user_name, setUser_name] = useState("");
+	const [profile_pic, setProfile_pic] = useState("");
 
-	// Function to authenticate with Kakao
-	const authenticateWithKakao = () => {
-		setIsAuthenticating(true);
-		// Kakao OAuth URL
-		const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
-		const redirectUri = encodeURIComponent(
-			`${window.location.origin}/api/kakao/unsubscribe-callback`
-		);
-		const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${redirectUri}&response_type=code&state=${params.user_id}`;
-
-		// Redirect to Kakao auth
-		window.location.href = kakaoAuthUrl;
-	};
+	useEffect(() => {
+		const fetchUser = async () => {
+			const supabase = await createClient();
+			const { data: app } = await supabase
+				.from("apps")
+				.select("*")
+				.eq("user_id", params.user_id)
+				.single();
+			setUser_name(app?.kakao?.nickname);
+			setProfile_pic(app?.kakao?.profile_image);
+		};
+		fetchUser();
+	}, [params.user_id]);
 
 	const handleUnsubscribe = async () => {
 		try {
 			setIsLoading(true);
-
-			// First authenticate with Kakao to get the subscriber's ID
-			authenticateWithKakao();
-
-			// The actual unsubscribe will happen after Kakao authentication callback
-			// See the unsubscribe-callback API route
+			const response = await fetch(
+				`/api/kakao/unsubscribe?user_id=${params.user_id}`
+			);
+			const data = await response.json();
+			window.location.href = data.authorization_url;
 		} catch (err) {
 			setError(
 				"Failed to initiate unsubscribe process. Please try again later."
@@ -52,9 +55,14 @@ export function KakaoRemoveContent({
 					<h2 className="mt-6 text-3xl font-bold text-gray-900">
 						Unsubscribe Confirmation
 					</h2>
+					<Avatar>
+						<AvatarImage src={profile_pic} />
+						<AvatarFallback>{user_name?.charAt(0)}</AvatarFallback>
+					</Avatar>
 					<p className="mt-2 text-sm text-gray-600">
-						You are about to unsubscribe from notifications
+						You are about to stop receiving messages from
 					</p>
+					<span className="font-semibold"> {user_name}</span> on GoodSheetLife.
 				</div>
 
 				<div className="mt-8 space-y-6">
