@@ -325,6 +325,20 @@ export function MyDashboardContent() {
 							)}
 						</CardContent>
 					</Card>
+					<Card>
+						<CardHeader>
+							<CardTitle>Disconnect Kakao Account</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<Button
+								onClick={() => {
+									window.location.href = "/kakao/disconnect";
+								}}
+							>
+								Disconnect Kakao Account
+							</Button>
+						</CardContent>
+					</Card>
 				</>
 			)}
 		</div>
