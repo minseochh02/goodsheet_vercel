@@ -94,9 +94,9 @@ function NavbarContent() {
 								{user && (
 									<>
 										<Link
-											href="/mypage"
+											href="/dashboard"
 											className={`px-3 py-2 rounded-md text-sm font-medium ${
-												pathname === "/mypage"
+												pathname === "/dashboard"
 													? "text-blue-600 bg-blue-50"
 													: "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
 											}`}

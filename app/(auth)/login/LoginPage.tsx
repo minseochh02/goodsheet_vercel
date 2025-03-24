@@ -20,13 +20,13 @@ export default function LoginPageContent() {
 					.eq("id", user_id);
 
 				if (data) {
-					router.push(`/mypage?user_id=${user_id}`);
+					router.push(`/dashboard?user_id=${user_id}`);
 					return;
 				}
 			} else {
 				const { data: session } = await supabase.auth.getSession();
 				if (session) {
-					router.push("/mypage");
+					router.push("/dashboard");
 					return;
 				}
 			}

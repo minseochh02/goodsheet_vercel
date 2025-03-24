@@ -57,7 +57,14 @@ export function MyDashboardContent() {
 				setLoading(false);
 				return;
 			}
-			setUserId(session.user.id);
+			// retrieve user_id via email
+			const { data: userData, error: userDetailsError } = await supabase
+				.from("users")
+				.select("*")
+				.eq("email", session?.user?.email)
+				.single();
+			if (userDetailsError) throw new Error("Failed to fetch user details");
+			setUserId(userData?.id);
 		}
 
 		checkAuth();

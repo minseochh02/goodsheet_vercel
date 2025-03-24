@@ -165,7 +165,7 @@ function SignUpContent() {
 							appData.sheet_id === sheet_id &&
 							appData.script_id === script_id
 						) {
-							router.push("/mypage");
+							router.push("/dashboard");
 						}
 					} else {
 						// Create new app for existing user
@@ -241,7 +241,7 @@ function SignUpContent() {
 
 						if (appData) {
 							setApp(appData);
-							router.push("/mypage");
+							router.push("/dashboard");
 						} else {
 							// User exists but no app
 							setCurrentStep(2);
@@ -318,7 +318,7 @@ function SignUpContent() {
 	};
 
 	const handleCompleteSetup = () => {
-		router.push("/mypage");
+		router.push("/dashboard");
 	};
 
 	const stepsUI = [

@@ -68,7 +68,7 @@ export default function Home() {
 						<div className="flex justify-center gap-4">
 							{isAuthenticated ? (
 								<Link
-									href={`/mypage`}
+									href={`/dashboard`}
 									className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
 								>
 									Go to My Page
@@ -120,7 +120,7 @@ export default function Home() {
 					</p>
 					{isAuthenticated ? (
 						<Link
-							href={`/mypage`}
+							href={`/dashboard`}
 							className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors"
 						>
 							Go to My Page

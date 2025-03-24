@@ -85,8 +85,8 @@ export default function SignUpPageContent() {
 					}
 
 					if (existingApp) {
-						console.log("Found existing app, redirecting to /mypage");
-						window.location.href = "/mypage";
+						console.log("Found existing app, redirecting to /dashboard");
+						window.location.href = "/dashboard";
 						return;
 					}
 
@@ -252,8 +252,8 @@ export default function SignUpPageContent() {
 						.single();
 
 					if (existingApp) {
-						console.log("App already exists, redirecting to /mypage");
-						window.location.href = "/mypage";
+						console.log("App already exists, redirecting to /dashboard");
+						window.location.href = "/dashboard";
 						return;
 					}
 
@@ -269,8 +269,8 @@ export default function SignUpPageContent() {
 						return;
 					}
 
-					console.log("App created successfully, redirecting to /mypage");
-					window.location.href = "/mypage";
+					console.log("App created successfully, redirecting to /dashboard");
+					window.location.href = "/dashboard";
 				} catch (error) {
 					console.error("Error in app setup:", error);
 				} finally {
