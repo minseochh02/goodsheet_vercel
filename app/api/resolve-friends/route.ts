@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(request: NextRequest) {
+    console.log("GET request received to /resolve-friends");
+    return NextResponse.json({ message: "This endpoint only accepts POST requests" }, { status: 405 });
+}
+
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
